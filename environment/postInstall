@@ -39,34 +39,3 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 echo 'export PATH="$PATH:$HOME/local/bin"' >> ~/.bashrc
 source ~/.bashrc
-
-# install vscode settings
-mkdir -p /root/capsule/code/.vscode/Machine
-curl -fsSL https://raw.githubusercontent.com/tmchartrand/code-server-base-image/refs/heads/master/environment/files/vscode_machine_settings.json \
-  -o /root/capsule/code/.vscode/Machine/settings.json
-
-# add mcp settings to vscode if not already present
-echo installing mcp
-VSCODE_DIR=/root/capsule/code/.vscode/User/
-VSCODE_CONFIG="$VSCODE_DIR/mcp.json"
-if [ ! -f "$VSCODE_CONFIG" ]; then
-  mkdir -p "$VSCODE_DIR"
-  cat > "$VSCODE_CONFIG" << 'EOF'
-{
-	"servers": {
-		"nwb": {
-			"type": "stdio",
-			"command": "uvx",
-			"args": [
-				"--reinstall",
-                "nwb-mcp-server",
-                "--root_dir", "/root/capsule/data",
-                "--glob_pattern", "*/*.nwb"
-			],
-      "sandboxEnabled": true
-		}
-	},
-	"inputs": []
-}
-EOF
-fi

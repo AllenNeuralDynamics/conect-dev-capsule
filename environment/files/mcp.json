@@ -1,0 +1,15 @@
+{
+	"servers": {
+		"nwb": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"--reinstall",
+                "nwb-mcp-server",
+                "--root_dir", "/root/capsule/data",
+                "--glob_pattern", "*/*.nwb"
+			]
+		}
+	},
+	"inputs": []
+}
