@@ -1,0 +1,29 @@
+{
+	"version": 1,
+	"base_image": "codeocean/mambaforge3:23.1.0-4-python3.10.12-ubuntu22.04",
+	"post_install": true,
+	"options": {
+		"registry_host_arg": true,
+		"git_ask_pass": true,
+		"mount_secrets": true
+	},
+	"installers": {
+		"apt": {
+			"packages": [
+				{
+					"name": "build-essential"
+				}
+			],
+			"install_software_properties_common": true
+		},
+		"pip3": {
+			"packages": [
+				{
+					"name": "pynwb"
+				}
+			],
+			"options": {},
+			"pre_install_options": {}
+		}
+	}
+}
