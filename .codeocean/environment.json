@@ -20,6 +20,10 @@
 		"pip3": {
 			"packages": [
 				{
+					"name": "lazynwb",
+					"version": "0.2.88"
+				},
+				{
 					"name": "pynwb",
 					"version": "3.1.3"
 				}
