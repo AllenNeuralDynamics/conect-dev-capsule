@@ -1,5 +1,6 @@
 # aligned blocks - standalone
 from __future__ import annotations
+import time
 
 import logging
 import pathlib
@@ -124,12 +125,14 @@ def plot(
         else rewarded_context_colors
     )
     session_id = nwb_access.session_id_from_unit_id(unit_id)
+    t0 = time.time()
     trials = _get_trials(unit_id, zarr=zarr)
     unit = _get_unit(
         unit_id,
         include_spike_times=unit_spike_times is None,
         zarr=zarr,
     )
+    print(f"Data loading took {time.time() - t0:.2f} seconds")
     if unit_spike_times is None:
         unit_spike_times = np.asarray(unit["spike_times"][0], dtype=float)
     else:
