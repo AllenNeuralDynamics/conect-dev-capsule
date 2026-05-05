@@ -1,0 +1,27 @@
+[
+  {
+    "id": "6659b3bd-da91-49d9-85f9-c6def40722d2",
+    "mount": "ecephys_664851_2023-11-15_12-38-21_nwb_2026-05-01_13-18-55",
+    "nwb_path": "s3://codeocean-s3datasetsbucket-1u41qdg42ur9/6659b3bd-da91-49d9-85f9-c6def40722d2/664851_2023-11-15.nwb.zarr"
+  },
+  {
+    "id": "6d24169f-fe8b-408f-978a-c3f1ca200a25",
+    "mount": "ecephys_759434_2025-02-04_12-27-22_nwb_2026-05-01_13-17-10",
+    "nwb_path": "s3://codeocean-s3datasetsbucket-1u41qdg42ur9/6d24169f-fe8b-408f-978a-c3f1ca200a25/759434_2025-02-04.nwb.zarr"
+  },
+  {
+    "id": "6e1058f7-358d-45e6-a46a-51c5275da487",
+    "mount": "ecephys_742903_2024-10-22_10-58-35_nwb_2026-05-01_13-23-51",
+    "nwb_path": "s3://codeocean-s3datasetsbucket-1u41qdg42ur9/6e1058f7-358d-45e6-a46a-51c5275da487/742903_2024-10-22.nwb.zarr"
+  },
+  {
+    "id": "917a448b-8aa8-4188-9337-1b6f9d9618c3",
+    "mount": "ecephys_668755_2023-08-31_12-33-31_nwb_2026-05-01_13-19-39",
+    "nwb_path": "s3://codeocean-s3datasetsbucket-1u41qdg42ur9/917a448b-8aa8-4188-9337-1b6f9d9618c3/668755_2023-08-31.nwb.zarr"
+  },
+  {
+    "id": "df845413-afd9-4216-a830-ce016b4a348c",
+    "mount": "ecephys_713655_2024-08-09_10-41-47_nwb_2026-05-01_13-21-04",
+    "nwb_path": "s3://codeocean-s3datasetsbucket-1u41qdg42ur9/df845413-afd9-4216-a830-ce016b4a348c/713655_2024-08-09.nwb.zarr"
+  }
+]
