@@ -11,11 +11,23 @@ import unit_raster_psth_plot as plotter
 import nwb_access
 
 unit_id = nwb_access.SPECIFIC_UNIT_IDS[2]
+configs = [
+    dict(
+        unit_id="668755_2023-08-31_B-68",
+        max_psth_spike_rate=20,
+    ),
+    dict(
+        unit_id="668755_2023-08-31_B-213",
+        max_psth_spike_rate=60,
+    ),
+]
+config = configs[-1]
+print(f"Plotting unit {config['unit_id']}...")
 
-output = pathlib.Path('results') / f'example_unit_raster_psth_{unit_id}.png'
+output = pathlib.Path('results') / f'example_unit_raster_psth_{config["unit_id"]}.png'
 t0 = time.time()
 fig = plotter.plot(
-    unit_id,
+    **config,
     stim_names=('sound1', 'vis1', 'sound2', 'vis2'),
     with_instruction_trial_whitespace=True,
     zarr=False,

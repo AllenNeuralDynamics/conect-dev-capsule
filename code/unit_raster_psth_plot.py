@@ -21,6 +21,8 @@ plt.rcParams["font.size"] = 8
 plt.rcParams["pdf.fonttype"] = 42
 
 DEFAULT_REWARDED_CONTEXT_COLORS = {"vis": "#6464FF", "aud": "#CD0F55"}
+INSTRUCTION_TRIAL_COLOR = "#6FA23A"
+EVENT_MARKER_COLORS = {"hit": "#00A59B", "false_alarm": "#FF6E00"}
 
 
 class NoSpikesInTrialsError(ValueError):
@@ -233,7 +235,8 @@ def plot(
     response_window_start_time = 0.1  # np.median(np.diff(trials.select('stim_start_time', 'response_window_start_time')))
     response_window_stop_time = 1  # np.median(np.diff(trials.select('stim_start_time', 'response_window_stop_time')))
     instruction_patch_params = {
-        "color": [0.88, 0.88, 0.88],
+        "color": INSTRUCTION_TRIAL_COLOR,
+        "alpha": 0.22,
         "lw": 0,
         "zorder": -1,
     }
@@ -381,7 +384,7 @@ def plot(
                 "lineoffsets": ypos,
                 "linewidths": 0.3,
                 "linelengths": 0.8,
-                "color": [0.6] * 3,
+                "color": [0.45] * 3,
                 "zorder": 99,
             }
             if trial_spike_times.size == 1 and trial_spike_times[0] is None:
@@ -398,8 +401,8 @@ def plot(
                     marker="o",
                     s=9,
                     facecolors="none",
-                    edgecolors="gray",
-                    linewidths=0.2,
+                    edgecolors=EVENT_MARKER_COLORS["hit"],
+                    linewidths=0.45,
                     zorder=100,
                 )
                 continue
@@ -416,8 +419,8 @@ def plot(
                     marker="^",
                     s=10,
                     facecolors="none",
-                    edgecolors="gray",
-                    linewidths=0.2,
+                    edgecolors=EVENT_MARKER_COLORS["false_alarm"],
+                    linewidths=0.45,
                     zorder=100,
                 )
                 continue
@@ -531,8 +534,24 @@ def plot(
         ax.xaxis.set_tick_params(labelsize=6)
         ax.set_yticks([])
         if ax is axes[0]:
-            ax.set_ylabel("<- Trials")
-            ax.yaxis.set_label_coords(x=-0.5, y=0.5)
+            ax.set_ylabel("trials")
+            ax.yaxis.set_label_coords(x=-0.48, y=0.5)
+            ax.annotate(
+                "",
+                xy=(-0.38, 0.42),
+                xytext=(-0.38, 0.58),
+                xycoords="axes fraction",
+                textcoords="axes fraction",
+                arrowprops={
+                    "arrowstyle": "->",
+                    "color": "black",
+                    "linewidth": 0.8,
+                    "mutation_scale": 8,
+                    "shrinkA": 0,
+                    "shrinkB": 0,
+                },
+                annotation_clip=False,
+            )
             ax.text(
                 x=xlim_min - 0.9,
                 y=-0,
@@ -567,7 +586,7 @@ def plot(
         else:
             location = "no CCF location (unannotated)"
     fig.set_dpi(300)
-    fig.suptitle(f"{unit_id = !r} | {location = !r}", fontsize=10)
+    fig.suptitle(f"unit_id = {unit_id} | location = {location}", fontsize=10)
     if show_event_marker_legend:
         legend_handles = [
             Line2D(
@@ -576,7 +595,7 @@ def plot(
                 marker="o",
                 linestyle="none",
                 markerfacecolor="none",
-                markeredgecolor="gray",
+                markeredgecolor=EVENT_MARKER_COLORS["hit"],
                 markeredgewidth=0.5,
                 markersize=4,
                 label="hit",
@@ -587,7 +606,7 @@ def plot(
                 marker="^",
                 linestyle="none",
                 markerfacecolor="none",
-                markeredgecolor="gray",
+                markeredgecolor=EVENT_MARKER_COLORS["false_alarm"],
                 markeredgewidth=0.5,
                 markersize=4,
                 label="false alarm",
