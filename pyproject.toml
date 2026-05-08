@@ -13,6 +13,3 @@ dependencies = [
     "polars",
     "polars-vec-ops>=0.1.8",
 ]
-
-[tool.uv.sources]
-lazynwb = { path = "../lazynwb" }

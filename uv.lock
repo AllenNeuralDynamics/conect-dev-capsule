@@ -504,7 +504,7 @@ dependencies = [
 requires-dist = [
     { name = "altair", specifier = ">=6.1.0" },
     { name = "ipykernel", specifier = ">=7.2.0" },
-    { name = "lazynwb", directory = "../lazynwb" },
+    { name = "lazynwb", specifier = "==1.0.0.dev1" },
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "polars" },
@@ -1335,7 +1335,7 @@ wheels = [
 [[package]]
 name = "lazynwb"
 version = "1.0.0.dev1"
-source = { directory = "../lazynwb" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiosqlite" },
     { name = "dotenv" },
@@ -1357,46 +1357,9 @@ dependencies = [
     { name = "zarr", version = "2.18.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "zarr", version = "2.18.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiosqlite", specifier = ">=0.20.0" },
-    { name = "dotenv", specifier = ">=0.9.9" },
-    { name = "h5py", specifier = ">=3.10.0" },
-    { name = "hdmf-zarr", marker = "extra == 'pynwb'", specifier = ">=0.12.0" },
-    { name = "numcodecs", specifier = "<0.16" },
-    { name = "obstore", specifier = ">=0.9.1" },
-    { name = "pandas", specifier = ">=2.0.0" },
-    { name = "polars", extras = ["pandas"], specifier = ">1.32.0" },
-    { name = "pydantic", specifier = ">=2.11.6" },
-    { name = "pydantic-settings", specifier = ">=2.11.0" },
-    { name = "pynwb", marker = "extra == 'pynwb'", specifier = ">=3.1.3" },
-    { name = "remfile", specifier = ">=0.1.10" },
-    { name = "requests", specifier = ">=2.32.4" },
-    { name = "s3fs", specifier = ">=2025.7.0" },
-    { name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=2.0.0" },
-    { name = "tqdm", specifier = ">=4.66.2" },
-    { name = "universal-pathlib", specifier = ">=0.1.4" },
-    { name = "zarr", specifier = ">=2.17.0,<3.0" },
-]
-provides-extras = ["pynwb"]
-
-[package.metadata.requires-dev]
-bump = [
-    { name = "bump-my-version", specifier = ">=1.1.1" },
-    { name = "git-changelog", specifier = ">=2.5.3" },
-]
-linting = [
-    { name = "black", specifier = ">=25.1.0" },
-    { name = "isort", specifier = ">=6.0.1" },
-    { name = "ruff", specifier = ">=0.11.2" },
-]
-task-runner = [{ name = "poethepoet", specifier = ">=0.33.1" }]
-testing = [
-    { name = "lazynwb", extras = ["pynwb"] },
-    { name = "mypy", specifier = ">=1.4.1" },
-    { name = "pytest", specifier = ">=7.4.0" },
-    { name = "pytest-cov", specifier = ">=4.1.0" },
+sdist = { url = "https://files.pythonhosted.org/packages/50/bf/9f56569399aeb3880385167f7ab9284f0ed254b0cfb5f6b6b8a6d6169218/lazynwb-1.0.0.dev1.tar.gz", hash = "sha256:9f4b38d05db2b4e19ac986e9e8d98af6e602a0b90ee5dd237e81aab52d060e5b", size = 182471, upload-time = "2026-05-07T20:58:46.622Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/77/d7/d03eb209ef994f525eb7f0ca0f1b2e2398b100a2169a232693e6c42015ac/lazynwb-1.0.0.dev1-py3-none-any.whl", hash = "sha256:38c9b01e2ff07733dad98a85b30769b5dd918c451496c760d59e2f890d259dc6", size = 141839, upload-time = "2026-05-07T20:58:45.433Z" },
 ]
 
 [[package]]
