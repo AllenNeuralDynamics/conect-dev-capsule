@@ -79,28 +79,12 @@ Each recording session follows a standardized sequence of epochs:
 
 ---
 
-## Task Description
-
-The task ("DynamicRouting1") is a **cross-modal go/no-go detection task with context-dependent rule switching**. The stimulus set uses oriented moving visual gratings and amplitude-modulated noise (AMN) auditory stimuli.
-
-### Stimulus Types
-
-Each trial presents one of the following stimuli:
-
-| Stimulus | Description |
-|----------|-------------|
-| **vis1** | Visual grating (target orientation) |
-| **vis2** | Visual grating (non-target orientation) |
-| **sound1** | Auditory stimulus (target frequency) |
-| **sound2** | Auditory stimulus (non-target frequency) |
-| **catch** | No stimulus (catch trial) |
-
 ### Context Blocks and Rule Switching
 
 The session is divided into **6 blocks** (indices 0–5), alternating between two rewarded-modality contexts:
 
-- **Visual context** (`rewarded_modality = "vis"`): The mouse must lick to visual targets (`vis1` → go) and withhold licking to all other stimuli (including auditory targets `sound1` → no-go).
-- **Auditory context** (`rewarded_modality = "aud"`): The mouse must lick to auditory targets (`sound1` → go) and withhold licking to all other stimuli (including visual targets `vis1` → no-go).
+- **Visual context** (`rewarded_modality = "vis"`): The mouse must lick to visual targets (`vis+` → go) and withhold licking to all other stimuli (including auditory targets `aud+` → no-go).
+- **Auditory context** (`rewarded_modality = "aud"`): The mouse must lick to auditory targets (`aud+` → go) and withhold licking to all other stimuli (including visual targets `vis+` → no-go).
 
 Some sessions begin with visual blocks first, others with auditory blocks first. Each modality context has 3 blocks per session.
 
