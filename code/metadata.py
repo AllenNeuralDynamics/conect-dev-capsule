@@ -16,18 +16,18 @@ import pandas as pd
 DATA_DIR = Path("/root/capsule/data")
 OUTPUT_CSV = Path("/root/capsule/results/tables/session_metadata.csv")
 LIST_SEPARATOR = "; "
-LIST_COLUMNS = ["modality_abbreviations", "tags", "investigators"]
+LIST_COLUMNS = ["modalities", "tags", "investigators"]
 
 FIELDNAMES = [
-    "subject_id",
     "date",
-    "duration",
-    "type",
-    "modality_abbreviations",
-    "tags",
-    "name",
-    "project_name",
-    "investigators",
+    "subject_id",
+    # "project_name",
+    "session_type",
+    "modalities",
+    # "duration_s",
+    # "tags",
+    # "name",
+    # "investigators",
     "nwb_path",
 ]
 
@@ -48,7 +48,7 @@ def parse_args() -> argparse.Namespace:
         default=OUTPUT_CSV,
         help=f"CSV output path. Default: {OUTPUT_CSV}",
     )
-    return parser.parse_args()
+    return parser.parse_known_args()[0]
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -102,7 +102,7 @@ def join_values(values: Any) -> str:
     return str(values)
 
 
-def modality_abbreviations(data_description: dict[str, Any]) -> str:
+def modalities(data_description: dict[str, Any]) -> str:
     abbreviations: list[str] = []
     for modality in data_description.get("modalities") or []:
         if not isinstance(modality, dict):
@@ -147,15 +147,15 @@ def session_row(session_dir: Path) -> dict[str, str]:
     end_time = acquisition.get("acquisition_end_time")
 
     return {
-        "subject_id": str(acquisition.get("subject_id") or data_description.get("subject_id") or ""),
         "date": date_from_start_time(start_time),
-        "duration": duration_seconds(start_time, end_time),
-        "type": str(acquisition.get("acquisition_type") or ""),
-        "modality_abbreviations": modality_abbreviations(data_description),
-        "tags": join_values(data_description.get("tags")),
-        "name": str(data_description.get("name") or ""),
-        "project_name": str(data_description.get("project_name") or ""),
-        "investigators": investigator_names(data_description),
+        "subject_id": str(acquisition.get("subject_id") or data_description.get("subject_id") or ""),
+        "session_type": str(acquisition.get("acquisition_type") or ""),
+        "modalities": modalities(data_description),
+        # "duration_s": duration_seconds(start_time, end_time),
+        # "tags": join_values(data_description.get("tags")),
+        # "name": str(data_description.get("name") or ""),
+        # "project_name": str(data_description.get("project_name") or ""),
+        # "investigators": investigator_names(data_description),
         "nwb_path": find_nwb_path(session_dir),
     }
 
@@ -187,20 +187,31 @@ def split_list_cell(value: Any) -> list[str]:
 def load_csv_for_display(csv_path: Path) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
     for column in LIST_COLUMNS:
-        df[column] = df[column].apply(split_list_cell)
+        if column in df.columns:
+            df[column] = df[column].apply(split_list_cell)
     return df
 
+def get_df(zarr: bool = True) -> pd.DataFrame:
+    args = parse_args()
+    try:
+        df = load_csv_for_display(args.output)
+    except FileNotFoundError:
+        # if it doesn't exist, write it:
+        main()
+        df = load_csv_for_display(args.output)
+    if not zarr:
+        df = df.query("not nwb_path.str.contains('zarr')")
+    else:
+        df = df.query("nwb_path.str.contains('zarr')")
+    return df.reset_index(drop=True)
 
 def main() -> None:
     args = parse_args()
     rows = [session_row(path) for path in session_dirs(args.data_dir)]
     write_csv(rows, args.output)
     print(f"Wrote {len(rows)} rows to {args.output}")
-
-    df = load_csv_for_display(args.output)
-    print("\nLoaded CSV with pandas; list-like columns restored from semicolon-separated cells:")
-    with pd.option_context("display.max_columns", None, "display.max_colwidth", None, "display.width", 0):
-        print(df.to_string(index=False))
+    # verify we can read it back:
+    _ = load_csv_for_display(args.output)
 
 
 if __name__ == "__main__":
