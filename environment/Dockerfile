@@ -1,4 +1,4 @@
-# hash:sha256:e66631e60b33f838f31b354380683fffac0fcc5f9015d0d8a5c7f5cc4c023381
+# hash:sha256:770842a7a787a68f86974716244d617b679a4dcd400cceebdf0b917616c453e5
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/mambaforge3:23.1.0-4-python3.10.12-ubuntu22.04
 
@@ -12,8 +12,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install -U --no-cache-dir \
-    lazynwb==0.2.88 \
-    pynwb==3.1.3
+    altair==6.1.0 \
+    hdmf-zarr==0.12.0 \
+    lazynwb==1.0.0.dev5 \
+    matplotlib==3.10.9 \
+    pynwb==3.1.3 \
+    seaborn==0.13.2
 
 COPY postInstall /
 RUN --mount=type=secret,id=secrets . /run/secrets/secrets \
