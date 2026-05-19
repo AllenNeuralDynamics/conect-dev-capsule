@@ -7,9 +7,10 @@ requires-python = ">=3.10"
 dependencies = [
     "altair>=6.1.0",
     "ipykernel>=7.2.0",
-    "lazynwb==1.0.0dev1",
+    "lazynwb==1.0.0dev5",
     "matplotlib",
     "numpy",
     "polars",
     "polars-vec-ops>=0.1.8",
+    "vl-convert-python",
 ]
