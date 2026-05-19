@@ -1,11 +1,18 @@
 from __future__ import annotations
 
+from pathlib import Path
+import sys
+
 import altair as alt
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
 import polars as pl
+
+_CODE_DIR = Path(__file__).resolve().parents[1]
+if str(_CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(_CODE_DIR))
 
 import pynwb_utils
 
