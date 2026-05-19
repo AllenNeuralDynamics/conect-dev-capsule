@@ -1,7 +1,55 @@
-# conect-dev-capsule
+# Dynamic Routing Hackathon Capsule
+
+## Project overview
+The Dynamic Routing project aims to uncover the neural mechanisms of flexible decision making. We train mice to perform a visual–auditory switching task in which the rewarded sensory modality alternates within a session, requiring mice to dynamically route sensory information to appropriate motor outputs depending on behavioral context. While mice perform this task, we record from neurons across the mouse brain to identify the neural correlates of flexible sensory-motor associations and to understand how context representations are generated, maintained, and used to guide behavior.
+
+## Recording strategy
+We insert up to six Neuropixels 1.0 (NP 1.0) probes simultaneously across the mouse brain using the **SHIELD implant** ([Bennett et al., *Neuron* 2024](https://doi.org/10.1016/j.neuron.2024.06.015)), a chronic implant system that enables repeatable, multi-probe access to dorsal cortex and underlying structures. Probes are inserted at varying angles and anterior-posterior positions to achieve broad coverage spanning cortical, thalamic, basal ganglia, and midbrain structures (among others). This approach allows us to simultaneously sample the activity of hundreds of neurons across functionally distinct brain regions while the mouse performs our switching task.
+
+<table>
+<tr>
+<td width="50%"><img src="code/images/SHIELD_diagram.png" alt="SHIELD implant with multiple Neuropixels probes" width="100%"></td>
+<td width="50%"><img src="code/images/brainwide_recording.png" alt="Brain-wide coverage of probe insertions" width="100%"></td>
+</tr>
+<tr>
+<td align="center"><em>Diagram of SHIELD implant with multiple Neuropixels 1.0 probes.</em></td>
+<td align="center"><em>Probe trajectories across mice and sessions showing dense coverage of left hemisphere.</em></td>
+</tr>
+</table>
+
+## Task
+
+Mice perform a **visual-auditory context-switching task** in which the rewarded stimulus modality alternates across blocks within each session.
+
+### Stimuli and Reward Contingencies
+
+Each trial presents one of four stimuli: a visual target (VIS+), a visual non-target (VIS−), an auditory target (AUD+), or an auditory non-target (AUD−). Trials are organized into alternating **auditory-rewarded (A)** and **visual-rewarded (V)** blocks. Within each block, only one target stimulus is rewarded (Figure below, panel **a**):
+
+- **Auditory context (A):** licking in response to AUD+ earns a water reward; licking to VIS+ is a false alarm.
+- **Visual context (V):** licking in response to VIS+ earns a water reward; licking to AUD+ a false alarm.
+
+Responses to either non-target stimulus (AUD−, VIS−) are never rewarded regardless of context.
+
+### Session and Block Structure
+
+A session lasts approximately 60 minutes and consists of six ~10-minute blocks alternating between auditory- and visual-rewarded contexts (Figure below, panel **b**). **Context is not explicitly cued on every trial** — the mouse must infer and maintain its representation of the current block from trial outcomes.
+
+Block transitions are signaled by **5 consecutive presentations of the newly rewarded target stimulus** (purple in panel **b**). If the mouse does not earn a contingent reward by licking during these trials, a non-contingent reward is given at the end of the response window. Following these trials, all four stimuli are presented in pseudorandom interleaved order for the remainder of the block.
+
+### Trial Structure
+
+Each trial begins with a **quiescent period** (1.5 s before stimulus onset) during which licking resets the trial. The stimulus is presented for 0.5 s, followed by a **response window** from 0.1–1.0 s post-stimulus onset. The trial concludes with an **inter-trial interval (ITI)** of 3–7.5 s before the next trial begins.
+
+![Task diagram showing reward contingencies for auditory and visual context blocks (panel a) and the nested timeline of a session, block, and trial (panel b)](code/images/DR_task_diagram.png)
+*__a__, Reward contingencies for the auditory (A) and visual (V) contexts. Only the target of the currently rewarded modality yields reward. __b__, Nested timeline of a session (six alternating 10-minute blocks), a block (five rewarded target cue trials followed by pseudo-randomly interleaved stimuli), and a trial (quiescent period, stimulus, response window, ITI).*
+
+
+## Data in this capsule
+
+This dataset comprises five Neuropixels recording sessions from five different mice, each packaged in a "data asset" in `/data`. 
 
 Each attached asset contains:
-- an .nwb file (.hdf5)
+- an .nwb file saved as a .hdf5 file or a .zarr folder
 - `nwb_contents.json` detailing the internal paths within each .hdf5 file, e.g.:
     ```
     [
@@ -10,27 +58,13 @@ Each attached asset contains:
         "/units"
     ]   
     ```
-
-- AIND metadata files
-
----
-# Data summary 
-The remainder of this readme was produced by Opus 4.6 using the `nwb-mcp-server` in 3 mins.
-
-Prompt:
-
-> *Describe the experiment, the task, and the trial structure. Give a summary of performance and areas recorded (only units with `is_qc_pass`). IGNORE ALL JSON FILES. Write findings to a markdown file in /results*
+- AIND metadata `.json` files
 
 
-Output:
+### Summary
 
-# Dynamic Routing Visual-Auditory Task-Switching Experiment
-
-## Experiment Overview
-
-These data are from the **Allen Institute for Neural Dynamics (AIND)**, Neural Circuits & Behavior / MindScope program. The experiment is a **visual-auditory task-switching behavior experiment** ("Dynamic Routing"), in which head-fixed mice perform a cross-modal go/no-go detection task while high-density extracellular electrophysiology (Neuropixels) is recorded simultaneously from multiple brain areas.
-
-Five sessions from five different mice are included:
+All animals successfully switched between contexts, as demonstrated by high d' values for the rewarded modality and suppressed responses to the non-rewarded modality. 
+A total of **6,685 QC-passing units** were recorded.
 
 | Session | Subject | Sex | Age | Genotype | Strain | Experiment Day |
 |---------|---------|-----|-----|----------|--------|----------------|
@@ -59,28 +93,12 @@ Each recording session follows a standardized sequence of epochs:
 
 ---
 
-## Task Description
-
-The task ("DynamicRouting1", stage 5) is a **cross-modal go/no-go detection task with context-dependent rule switching**. The stimulus set uses oriented moving visual gratings and amplitude-modulated noise (AMN) auditory stimuli.
-
-### Stimulus Types
-
-Each trial presents one of the following stimuli:
-
-| Stimulus | Description |
-|----------|-------------|
-| **vis1** | Visual grating (target orientation) |
-| **vis2** | Visual grating (non-target orientation) |
-| **sound1** | Auditory stimulus (target sound) |
-| **sound2** | Auditory stimulus (non-target sound) |
-| **catch** | No stimulus (catch trial) |
-
 ### Context Blocks and Rule Switching
 
 The session is divided into **6 blocks** (indices 0–5), alternating between two rewarded-modality contexts:
 
-- **Visual context** (`rewarded_modality = "vis"`): The mouse must lick to visual targets (`vis1` → go) and withhold licking to all other stimuli (including auditory targets `sound1` → no-go).
-- **Auditory context** (`rewarded_modality = "aud"`): The mouse must lick to auditory targets (`sound1` → go) and withhold licking to all other stimuli (including visual targets `vis1` → no-go).
+- **Visual context** (`rewarded_modality = "vis"`): The mouse must lick to visual targets (`vis+` → go) and withhold licking to all other stimuli (including auditory targets `aud+` → no-go).
+- **Auditory context** (`rewarded_modality = "aud"`): The mouse must lick to auditory targets (`aud+` → go) and withhold licking to all other stimuli (including visual targets `vis+` → no-go).
 
 Some sessions begin with visual blocks first, others with auditory blocks first. Each modality context has 3 blocks per session.
 
@@ -145,7 +163,7 @@ Key observations:
 
 ---
 
-## Electrophysiology: Recording Areas (QC-Passing Units Only)
+## Electrophysiology: Recorded Areas (QC-Passing Units Only)
 
 Units were filtered by `is_qc_pass = true`. Each session used 5–6 Neuropixels probes.
 
@@ -309,6 +327,3 @@ The most frequently recorded areas with QC-passing units include:
 
 ---
 
-## Summary
-
-This dataset comprises 5 Neuropixels recording sessions from the AIND Dynamic Routing project. Mice performed a cross-modal go/no-go task in which the rewarded stimulus modality (visual vs. auditory) alternated across 6 blocks per session. All animals successfully switched between contexts, as demonstrated by high d' values for the rewarded modality and suppressed responding to the non-rewarded modality. A total of **6,685 QC-passing units** were recorded across diverse cortical, subcortical, hippocampal, and midbrain structures, providing simultaneous coverage of sensory, association, motor, prefrontal, and subcortical circuits during flexible, context-dependent behavior.
