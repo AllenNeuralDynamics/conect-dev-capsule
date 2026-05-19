@@ -42,6 +42,9 @@
 				{
 					"name": "seaborn",
 					"version": "0.13.2"
+				},
+				{
+					"name": "vl-convert-python"
 				}
 			],
 			"options": {},
