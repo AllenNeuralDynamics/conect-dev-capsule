@@ -6,16 +6,11 @@ The Dynamic Routing project aims to uncover the neural mechanisms of flexible de
 ## Recording strategy
 We insert up to six Neuropixels 1.0 (NP 1.0) probes simultaneously across the mouse brain using the **SHIELD implant** ([Bennett et al., *Neuron* 2024](https://doi.org/10.1016/j.neuron.2024.06.015)), a chronic implant system that enables repeatable, multi-probe access to dorsal cortex and underlying structures. Probes are inserted at varying angles and anterior-posterior positions to achieve broad coverage spanning cortical, thalamic, basal ganglia, and midbrain structures (among others). This approach allows us to simultaneously sample the activity of hundreds of neurons across functionally distinct brain regions while the mouse performs our switching task.
 
-<table>
-<tr>
-<td width="50%"><img src="code/images/SHIELD_diagram.png" alt="SHIELD implant with multiple Neuropixels probes" width="100%"></td>
-<td width="50%"><img src="code/images/brainwide_recording.png" alt="Brain-wide coverage of probe insertions" width="100%"></td>
-</tr>
-<tr>
-<td align="center"><em>Diagram of SHIELD implant with multiple Neuropixels 1.0 probes.</em></td>
-<td align="center"><em>Probe trajectories across mice and sessions showing dense coverage of left hemisphere.</em></td>
-</tr>
-</table>
+---
+| ![SHIELD implant with multiple Neuropixels probes](code/images/SHIELD_diagram.png) | ![Brain-wide coverage of probe insertions](code/images/brainwide_recording.png) |
+|---|---|
+| *Diagram of SHIELD implant with multiple Neuropixels 1.0 probes.* | *Probe trajectories across mice and sessions showing dense coverage of left hemisphere.* |
+---
 
 ## Task
 
