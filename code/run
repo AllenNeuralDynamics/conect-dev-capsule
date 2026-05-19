@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-set -ex
+set -euo pipefail
+set -x
 
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
-python -u metadata.py "$@"
+
+jupyter nbconvert \
+    --to html \
+    --embed-images \
+    --execute dynamic_routing_tutorial.ipynb \
+    --ExecutePreprocessor.kernel_name=python3 \
+    --ExecutePreprocessor.timeout=180 \
+    --output-dir /root/capsule/results
+
+
