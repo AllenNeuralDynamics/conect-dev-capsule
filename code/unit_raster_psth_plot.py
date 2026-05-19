@@ -112,7 +112,7 @@ def _make_psth(
 def plot(
     unit_id: str,
     unit_spike_times: npt.NDArray[np.floating] | None = None,
-    stim_names=("vis1", "sound1", "vis2", "sound2"),
+    stim_names=("vis+", "aud+", "vis-", "aud-"),
     with_instruction_trial_whitespace: bool = False,
     max_psth_spike_rate: float = 60,  # Hz
     rewarded_context_colors: dict[str, str] | None = None,
@@ -145,7 +145,7 @@ def plot(
         raise ValueError(f"No trials found for {session_id}")
     if not unit_spike_times.size:
         raise NoSpikesInTrialsError(f"No spike times found for {unit_id}")
-    modality_to_rewarded_stim = {"aud": "sound1", "vis": "vis1"}
+    modality_to_rewarded_stim = {"aud": "aud+", "vis": "vis+"}
     # add spikes to trials:
     spike_times_by_trial = tuple(
         (
@@ -270,8 +270,8 @@ def plot(
             )
 
             is_vis_block: bool = "vis" in trial["rewarded_modality"]
-            is_vis_target: bool = "vis1" in trial["stim_name"]
-            is_aud_target: bool = "sound1" in trial["stim_name"]
+            is_vis_target: bool = "vis+" in trial["stim_name"]
+            is_aud_target: bool = "aud+" in trial["stim_name"]
             is_rewarded_stim: bool = (is_vis_target and is_vis_block) or (
                 is_aud_target and not is_vis_block
             )
@@ -566,10 +566,10 @@ def plot(
         ax.invert_yaxis()
         ax.set_aspect(0.1 * (xlim_max - xlim_min) / 3)
         stim_to_label = {
-            "vis1": "vis target",
-            "vis2": "vis non-target",
-            "sound1": "aud target",
-            "sound2": "aud non-target",
+            "vis+": "vis target",
+            "vis-": "vis non-target",
+            "aud+": "aud target",
+            "aud-": "aud non-target",
         }
         ax.set_title(stim_to_label[stim], fontsize=8)
         ax.spines["top"].set_visible(False)
@@ -633,7 +633,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=pathlib.Path)
     args = parser.parse_args()
 
-    fig = plot(unit_id=args.unit_id, stim_names=("sound1", "vis1", "sound2", "vis2"))
+    fig = plot(unit_id=args.unit_id, stim_names=("aud+", "vis+", "aud-", "vis-"))
     output = args.output or pathlib.Path(f"unit_raster_psth_plot_{args.unit_id}.png")
     fig.savefig(output, dpi=300, bbox_inches="tight")
     plt.close(fig)

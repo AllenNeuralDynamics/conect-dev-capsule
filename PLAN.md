@@ -25,9 +25,9 @@ Use `lazynwb` for runnable cells. Show PyNWB/Zarr loading only as a markdown ref
 - Update block summary plot with block 0 at the top, light-green instruction-trial spans, and black tick marks for actual non-contingent rewards.
 - Match instruction span and non-contingent reward tick height to the regular trial context bars, and move the block-structure legend to a horizontal strip above the axes.
 - Aggregate timing plot: mean quiescent, stimulus, and response-window timing from `/intervals/trials`; overlay hit and false-alarm response times for visual/auditory stimuli only, excluding catch. Use hollow circle/triangle marker shapes by stimulus modality.
-- Target-only behavior plot: compute response rates from `/intervals/trials`, excluding instruction/auto-reward trials; plot `vis1` and `sound1` response rates across block index; show `/intervals/performance` as a richer comparison table.
+- Target-only behavior plot: compute response rates from `/intervals/trials`, excluding instruction/auto-reward trials; plot `vis+` and `aud+` response rates across block index; show `/intervals/performance` as a richer comparison table.
 - Add a rewarded-modality color legend to the target-only behavior plot.
-- E-167 unit metadata plus four-stimulus raster/PSTH for `vis1`, `sound1`, `vis2`, and `sound2`.
+- E-167 unit metadata plus four-stimulus raster/PSTH for `vis+`, `aud+`, `vis-`, and `aud-`.
 - Add a subtle legend to the raster/PSTH for hollow hit and false-alarm markers.
 - Trial-aligned running-speed plot: align to stimulus onset for visual and auditory targets split by rewarded context; show mean plus SEM band.
 - Update running-speed plot to split target trials into correct and incorrect outcome rows: top row overlays hit and correct-reject trials; bottom row overlays false-alarm and miss trials, preserving target identity columns and rewarded-context colors.
