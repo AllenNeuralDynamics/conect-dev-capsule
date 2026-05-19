@@ -1,4 +1,4 @@
-# hash:sha256:696a66a5ae168548cd4e559fc99bb2e109323c61ffd9ad6afae9bbe84a3e4438
+# hash:sha256:6eba67ef6acb6ea092295fdbf7ee9dc4a40b9851ed33336219e247da5d133359
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/mambaforge3:23.1.0-4-python3.10.12-ubuntu22.04
 
@@ -18,7 +18,7 @@ RUN pip3 install -U --no-cache-dir \
     matplotlib==3.10.9 \
     pynwb==3.1.3 \
     seaborn==0.13.2 \
-    vl-convert-python
+    vl-convert-python==1.9.0.post1
 
 COPY postInstall /
 RUN --mount=type=secret,id=secrets . /run/secrets/secrets \
