@@ -1,0 +1,4 @@
+%%javascript
+requirejs.undef('vega-embed');
+requirejs.undef('vega');
+requirejs.undef('vega-lite');
