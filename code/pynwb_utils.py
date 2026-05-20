@@ -16,9 +16,9 @@ plt.rcParams["font.family"] = "Arial"
 plt.rcParams["font.size"] = 8
 plt.rcParams["pdf.fonttype"] = 42
 
-_RASTER_DEFAULT_CONTEXT_COLORS = {"vis": "#6464FF", "aud": "#CD0F55"}
+_RASTER_DEFAULT_CONTEXT_COLORS = {"vis": "#1f77b4", "aud": "#ff7f0e"}
 _RASTER_INSTRUCTION_COLOR = "#6FA23A"
-_RASTER_EVENT_COLORS = {"hit": "#00A59B", "false_alarm": "#FF6E00"}
+_RASTER_EVENT_COLORS = {"hit": "#00A59B", "false_alarm": "#CD0F55"}
 
 _TRIAL_COLUMNS = (
     "block_index",
