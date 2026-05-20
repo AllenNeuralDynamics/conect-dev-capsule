@@ -24,6 +24,10 @@
 					"version": "6.1.0"
 				},
 				{
+					"name": "git+https://github.com/AllenNeuralDynamics/brainglobe-atlasapi#egg=brainglobe-atlasapi",
+					"version": "2b3fed883c20184bdf921e294450c8a4054049c1"
+				},
+				{
 					"name": "hdmf-zarr",
 					"version": "0.12.0"
 				},
