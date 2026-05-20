@@ -3,6 +3,9 @@
 <h4 align="center"> May 20, 2026 </h4>   
 <h4 align="center"> Dynamic Routing</h4> 
 
+Source:
+https://github.com/AllenNeuralDynamics/conect-dev-capsule
+
 For data access outside of Code Ocean, see [REMOTE.md](REMOTE.md).
 
 ## Project overview
