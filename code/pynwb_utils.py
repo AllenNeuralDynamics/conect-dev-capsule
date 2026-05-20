@@ -351,24 +351,24 @@ def plot_ccf_density_heatmap(
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-    # Coronal max-projection
-    ax = axes[0]
-    coronal_proj = density_smooth.max(axis=0)
-    ax.imshow(atlas.reference.mean(axis=0), cmap="gray", aspect="equal")
-    ax.imshow(coronal_proj, cmap=cmap, aspect="equal", alpha=alpha,
-              vmin=0, vmax=coronal_proj.max())
-    ax.set_title("Unit density heatmap - Coronal projection")
-    ax.axis("off")
-    ax.invert_xaxis()
-
     # Sagittal max-projection (transposed: AP on x, DV on y)
+    ax = axes[0]
     ax = axes[1]
     sagittal_proj = density_smooth.max(axis=2).T
     ax.imshow(atlas.reference.mean(axis=2).T, cmap="gray", aspect="equal")
     ax.imshow(sagittal_proj, cmap=cmap, aspect="equal", alpha=alpha,
               vmin=0, vmax=sagittal_proj.max())
-    ax.set_title("Unit density heatmap - Sagittal projection")
+    ax.set_title("Unit density - Sagittal projection")
     ax.axis("off")
+
+    # Coronal max-projection
+    coronal_proj = density_smooth.max(axis=0)
+    ax.imshow(atlas.reference.mean(axis=0), cmap="gray", aspect="equal")
+    ax.imshow(coronal_proj, cmap=cmap, aspect="equal", alpha=alpha,
+              vmin=0, vmax=coronal_proj.max())
+    ax.set_title("Unit density - Coronal projection")
+    ax.axis("off")
+    ax.invert_xaxis()
 
     plt.tight_layout()
     return fig
