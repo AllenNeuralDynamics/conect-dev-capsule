@@ -18,7 +18,7 @@ import pynwb_utils
 
 
 _CCF_COORDINATE_COLS = ("ccf_ap", "ccf_ml", "ccf_dv")
-_TOOLTIP_COLS = ("structure", "unit_id", "is_qc_pass", "electrode_group_name")
+_TOOLTIP_COLS = ("structure", "name", "unit_id", "is_qc_pass", "electrode_group_name")
 _CCF_REQUIRED_COLS = (*_TOOLTIP_COLS, *_CCF_COORDINATE_COLS)
 _TRIAL_COLUMNS = pynwb_utils._TRIAL_COLUMNS
 

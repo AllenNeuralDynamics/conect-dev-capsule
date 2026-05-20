@@ -42,7 +42,7 @@ _TRIAL_COLUMNS = (
 CCF_COLORS_URL = "https://raw.githubusercontent.com/cortex-lab/allenCCF/refs/heads/master/structure_tree_safe_2017.csv"
 
 _CCF_COORDINATE_COLS = ["ccf_ap", "ccf_ml", "ccf_dv"]
-_TOOLTIP_COLS = ["structure", "unit_id", "is_qc_pass", "electrode_group_name"]
+_TOOLTIP_COLS = ["structure", "name", "unit_id", "is_qc_pass", "electrode_group_name"]
 _PIXELS_PER_MM = 65
 
 
@@ -134,15 +134,26 @@ def plot_ccf_coordinates(
     # ------------------------------------------------------------------ #
     # 2. Build structure → hex-colour mapping from Allen CCF reference CSV
     # ------------------------------------------------------------------ #
-    ccf_colors = (
-        pd.read_csv(CCF_COLORS_URL, usecols=["acronym", "color_hex_triplet"])
+    ccf_info = (
+        pd.read_csv(CCF_COLORS_URL, usecols=["acronym", "name", "color_hex_triplet"])
         .drop_duplicates("acronym")
     )
+
+    if "name" not in unit_ccf.columns:
+        unit_ccf = (
+            unit_ccf.merge(
+                ccf_info[["acronym", "name"]],
+                left_on="structure",
+                right_on="acronym",
+                how="left",
+            )
+            .drop(columns=["acronym"])
+        )
 
     color_map = (
         unit_ccf[["structure"]]
         .drop_duplicates()
-        .merge(ccf_colors, left_on="structure", right_on="acronym", how="left")
+        .merge(ccf_info, left_on="structure", right_on="acronym", how="left")
         .assign(
             color_hex_triplet=lambda df: "#"
             + df["color_hex_triplet"].fillna("999999")
