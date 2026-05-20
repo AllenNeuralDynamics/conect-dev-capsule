@@ -46,6 +46,47 @@ _TOOLTIP_COLS = ["structure", "unit_id", "is_qc_pass", "electrode_group_name"]
 _PIXELS_PER_MM = 65
 
 
+def get_area_summary_df(units_df_or_nwb) -> pd.DataFrame:
+    """Return unit and QC-pass counts by Allen CCF structure.
+
+    Parameters
+    ----------
+    units_df_or_nwb:
+        Either a pandas DataFrame with unit metadata (must contain columns
+        ``structure`` and ``is_qc_pass``), or a ``pynwb.NWBFile`` from which
+        the units table is extracted automatically.
+    """
+    if isinstance(units_df_or_nwb, pd.DataFrame):
+        units_df = units_df_or_nwb
+    else:
+        units_df = units_df_or_nwb.units.to_dataframe(
+            exclude={"waveform_mean", "waveform_sd"}
+        )
+
+    ccf_df = pd.read_csv(CCF_COLORS_URL, usecols=["name", "acronym"])
+
+    return (
+        pd.concat(
+            {
+                "n units": units_df["structure"].value_counts(),
+                "n passing qc": units_df.loc[
+                    units_df["is_qc_pass"], "structure"
+                ].value_counts(),
+            },
+            axis=1,
+        )
+        .fillna(0)
+        .astype(int)
+        .rename_axis("structure")
+        .reset_index()
+        .merge(ccf_df, left_on="structure", right_on="acronym")
+        .sort_values("structure")
+        .rename(columns={"name": "description", "structure": "structure (acronym)"})
+        [["description", "structure (acronym)", "n units", "n passing qc"]]
+        .set_index("structure (acronym)")
+    )
+
+
 def plot_ccf_coordinates(
     units_df_or_nwb,
     *,
@@ -166,6 +207,171 @@ def plot_ccf_coordinates(
     )
 
     return (ap_projection | ml_projection).properties(title=title)
+
+
+# ---------------------------------------------------------------------------
+# Brainglobe atlas slice plots
+# ---------------------------------------------------------------------------
+
+_BRAINGLOBE_DIR = "/data/.brainglobe"
+
+
+def _get_ccf_atlas():
+    """Load (or return cached) the Allen Mouse 25µm atlas via brainglobe."""
+    import brainglobe_atlasapi as bg
+
+    bg.config.write_config_value("brainglobe_dir", _BRAINGLOBE_DIR)
+    return bg.BrainGlobeAtlas("allen_mouse_25um")
+
+
+def plot_ccf_slice(
+    units_df_or_nwb,
+    *,
+    view: str = "coronal",
+    slice_coord_um: float | None = None,
+    proximity_um: float = 250,
+) -> plt.Figure:
+    """Plot a coronal or sagittal brain slice with unit locations overlaid.
+
+    Parameters
+    ----------
+    units_df_or_nwb:
+        A pandas DataFrame with unit metadata (must contain ``ccf_ap``,
+        ``ccf_dv``, ``ccf_ml`` columns), or a ``pynwb.NWBFile``.
+    view:
+        ``"coronal"`` or ``"sagittal"``.
+    slice_coord_um:
+        The coordinate (in microns) at which to take the slice.  If *None*,
+        uses the median coordinate of the units along the slicing axis.
+    proximity_um:
+        Units within this distance of the slice plane are shown.
+    """
+    if isinstance(units_df_or_nwb, pd.DataFrame):
+        units_df = units_df_or_nwb
+    else:
+        units_df = units_df_or_nwb.units.to_dataframe(
+            exclude={"waveform_mean", "waveform_sd"}
+        )
+
+    atlas = _get_ccf_atlas()
+    resolution = atlas.resolution[0]
+
+    if view == "coronal":
+        slice_um = slice_coord_um if slice_coord_um is not None else units_df["ccf_ap"].median()
+        slice_idx = int(slice_um / resolution)
+        ref_img = atlas.reference[slice_idx]
+        ann_img = atlas.annotation[slice_idx]
+        nearby = units_df[(units_df["ccf_ap"] - slice_um).abs() < proximity_um]
+        x_vox = nearby["ccf_ml"] / resolution
+        y_vox = nearby["ccf_dv"] / resolution
+        xlabel, ylabel = "ML (voxels)", "DV (voxels)"
+        title_prefix = f"Coronal (AP = {slice_um:.0f} µm)"
+        invert_x = True
+    elif view == "sagittal":
+        slice_um = slice_coord_um if slice_coord_um is not None else units_df["ccf_ml"].median()
+        slice_idx = int(slice_um / resolution)
+        ref_img = atlas.reference[:, :, slice_idx].T
+        ann_img = atlas.annotation[:, :, slice_idx].T
+        nearby = units_df[(units_df["ccf_ml"] - slice_um).abs() < proximity_um]
+        x_vox = nearby["ccf_ap"] / resolution
+        y_vox = nearby["ccf_dv"] / resolution
+        xlabel, ylabel = "AP (voxels)", "DV (voxels)"
+        title_prefix = f"Sagittal (ML = {slice_um:.0f} µm)"
+        invert_x = False
+    else:
+        raise ValueError(f"view must be 'coronal' or 'sagittal', got {view!r}")
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    ax = axes[0]
+    ax.imshow(ref_img, cmap="gray", aspect="equal")
+    ax.set_title(f"{title_prefix} - Reference")
+    ax.axis("off")
+    if invert_x:
+        ax.invert_xaxis()
+    ax.scatter(x_vox, y_vox, c="red", s=5, alpha=0.6, label="units")
+    ax.legend(loc="upper right")
+
+    ax = axes[1]
+    ax.imshow(ann_img, cmap="nipy_spectral", aspect="equal", alpha=0.7)
+    ax.set_title(f"{title_prefix} - Annotation")
+    ax.axis("off")
+    if invert_x:
+        ax.invert_xaxis()
+    ax.scatter(x_vox, y_vox, c="white", s=5, alpha=0.8, edgecolors="black", linewidths=0.3)
+
+    plt.tight_layout()
+    return fig
+
+
+def plot_ccf_density_heatmap(
+    units_df_or_nwb,
+    *,
+    sigma: float = 3,
+    cmap: str = "hot",
+    alpha: float = 0.7,
+) -> plt.Figure:
+    """Plot unit density heatmaps projected onto coronal and sagittal views.
+
+    Parameters
+    ----------
+    units_df_or_nwb:
+        A pandas DataFrame with unit metadata (must contain ``ccf_ap``,
+        ``ccf_dv``, ``ccf_ml`` columns), or a ``pynwb.NWBFile``.
+    sigma:
+        Gaussian smoothing sigma (in voxels) for the density map.
+    cmap:
+        Matplotlib colormap for the density overlay.
+    alpha:
+        Transparency of the density overlay.
+    """
+    from scipy.ndimage import gaussian_filter
+
+    if isinstance(units_df_or_nwb, pd.DataFrame):
+        units_df = units_df_or_nwb
+    else:
+        units_df = units_df_or_nwb.units.to_dataframe(
+            exclude={"waveform_mean", "waveform_sd"}
+        )
+
+    atlas = _get_ccf_atlas()
+    resolution = atlas.resolution[0]
+
+    density = np.zeros(atlas.annotation.shape, dtype=np.float32)
+    units_with_coords = units_df.dropna(subset=["ccf_ap", "ccf_dv", "ccf_ml"])
+
+    ap_idx = (units_with_coords["ccf_ap"] / resolution).astype(int).clip(0, density.shape[0] - 1)
+    dv_idx = (units_with_coords["ccf_dv"] / resolution).astype(int).clip(0, density.shape[1] - 1)
+    ml_idx = (units_with_coords["ccf_ml"] / resolution).astype(int).clip(0, density.shape[2] - 1)
+
+    for a, d, m in zip(ap_idx, dv_idx, ml_idx):
+        density[a, d, m] += 1
+
+    density_smooth = gaussian_filter(density, sigma=sigma)
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    # Coronal max-projection
+    ax = axes[0]
+    coronal_proj = density_smooth.max(axis=0)
+    ax.imshow(atlas.reference.mean(axis=0), cmap="gray", aspect="equal")
+    ax.imshow(coronal_proj, cmap=cmap, aspect="equal", alpha=alpha,
+              vmin=0, vmax=coronal_proj.max())
+    ax.set_title("Unit density heatmap - Coronal projection")
+    ax.axis("off")
+    ax.invert_xaxis()
+
+    # Sagittal max-projection (transposed: AP on x, DV on y)
+    ax = axes[1]
+    sagittal_proj = density_smooth.max(axis=2).T
+    ax.imshow(atlas.reference.mean(axis=2).T, cmap="gray", aspect="equal")
+    ax.imshow(sagittal_proj, cmap=cmap, aspect="equal", alpha=alpha,
+              vmin=0, vmax=sagittal_proj.max())
+    ax.set_title("Unit density heatmap - Sagittal projection")
+    ax.axis("off")
+
+    plt.tight_layout()
+    return fig
 
 
 # ---------------------------------------------------------------------------
