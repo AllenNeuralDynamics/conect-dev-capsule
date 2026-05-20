@@ -3,6 +3,8 @@
 <h4 align="center"> May 20, 2026 </h4>   
 <h4 align="center"> Dynamic Routing</h4> 
 
+For data access outside of Code Ocean, see [REMOTE.md](REMOTE.md).
+
 ## Project overview
 The Dynamic Routing project aims to uncover the neural mechanisms of flexible decision making. We train mice to perform a visual–auditory switching task in which the rewarded sensory modality alternates within a session, requiring mice to dynamically route sensory information to appropriate motor outputs depending on behavioral context. While mice perform this task, we record from neurons across the mouse brain to identify the neural correlates of flexible sensory-motor associations and to understand how context representations are generated, maintained, and used to guide behavior.
 
