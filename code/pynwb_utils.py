@@ -364,7 +364,6 @@ def plot_ccf_density_heatmap(
 
     # Sagittal max-projection (transposed: AP on x, DV on y)
     ax = axes[0]
-    ax = axes[1]
     sagittal_proj = density_smooth.max(axis=2).T
     ax.imshow(atlas.reference.mean(axis=2).T, cmap="gray", aspect="equal")
     ax.imshow(sagittal_proj, cmap=cmap, aspect="equal", alpha=alpha,
@@ -373,6 +372,7 @@ def plot_ccf_density_heatmap(
     ax.axis("off")
 
     # Coronal max-projection
+    ax = axes[1]
     coronal_proj = density_smooth.max(axis=0)
     ax.imshow(atlas.reference.mean(axis=0), cmap="gray", aspect="equal")
     ax.imshow(coronal_proj, cmap=cmap, aspect="equal", alpha=alpha,
