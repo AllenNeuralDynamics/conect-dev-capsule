@@ -519,9 +519,7 @@ def plot_unit_raster_psth(
         ax.set_xlabel("time from\nstimulus onset (s)")
         ax.invert_yaxis()
         ax.set_aspect(0.1 * (xlim_max - xlim_min) / 3)
-        stim_to_label = {"vis+": "vis target", "vis-": "vis non-target",
-                         "aud+": "aud target", "aud-": "aud non-target"}
-        ax.set_title(stim_to_label.get(stim, stim), fontsize=8)
+        ax.set_title(stim, fontsize=8)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
         ax.spines["left"].set_visible(False)
