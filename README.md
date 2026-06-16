@@ -67,17 +67,17 @@ Each attached asset contains:
 ### Summary
 
 All animals successfully switched between contexts, as demonstrated by high d' values for the rewarded modality and suppressed responses to the non-rewarded modality. 
-A total of **6,685 QC-passing units** were recorded.
+A total of **4,252 QC-passing units** were recorded.
 
 | Session | Subject | Sex | Age | Genotype | Strain | Experiment Day |
 |---------|---------|-----|-----|----------|--------|----------------|
-| 664851_2023-11-15 | 664851 | F | P310 | Pvalb-IRES-Cre/wt;Ai32 | Pvalb-IRES-Cre;Ai32 | Day 3 |
-| 668755_2023-08-31 | 668755 | M | P206 | wt/wt | C57BL6J(NP) | Day 4 |
-| 713655_2024-08-09 | 713655 | M | P260 | Sst-IRES-Cre/wt;Ai32 | Sst-IRES-Cre;Ai32 | Day 5 |
-| 742903_2024-10-22 | 742903 | F | P159 | Vip-IRES-Cre/wt;Ai32 | Vip-IRES-Cre;Ai32 | Day 2 |
-| 759434_2025-02-04 | 759434 | M | P177 | VGAT-ChR2-YFP/wt | VGAT-ChR2-YFP(ND) | Day 2 |
+| 664851_2023-11-15 | 664851 | F | P310D | Pvalb-IRES-Cre/wt;Ai32(RCL-ChR2(H134R)_EYFP)/wt | Pvalb-IRES-Cre;Ai32 | Day 3 |
+| 668755_2023-08-31 | 668755 | M | P206D | wt/wt | C57BL6J(NP) | Day 4 |
+| 713655_2024-08-09 | 713655 | M | P260D | Sst-IRES-Cre/wt;Ai32(RCL-ChR2(H134R)_EYFP)/wt | Sst-IRES-Cre;Ai32 | Day 5 |
+| 742903_2024-10-22 | 742903 | F | P159D | Vip-IRES-Cre/wt;Ai32(RCL-ChR2(H134R)_EYFP)/wt | Vip-IRES-Cre;Ai32 | Day 2 |
+| 759434_2025-02-04 | 759434 | M | P177D | VGAT-ChR2-YFP/wt | VGAT-ChR2-YFP(ND) | Day 2 |
 
-Three of the five mouse lines express channelrhodopsin (ChR2) in specific inhibitory interneuron classes (Pvalb, Sst, Vip, or all GABAergic via VGAT), enabling optotagging of those cell types. One mouse (668755) is wild-type.
+Four of the five mouse lines express channelrhodopsin (ChR2) in specific inhibitory interneuron classes (Pvalb, Sst, Vip, or all GABAergic via VGAT), enabling optotagging of those cell types. One mouse (668755) is wild-type.
 
 ---
 
@@ -174,141 +174,138 @@ Units were filtered by `is_qc_pass = true`. Each session used 5–6 Neuropixels 
 
 | Session | Total Units | QC-Pass Units | # Probes | # Structures (QC-pass) |
 |---------|-------------|---------------|----------|------------------------|
-| 664851 | 3,062 | 1,118 | 5 | 22 |
-| 668755 | 2,878 | 1,184 | 6 | 28 |
-| 713655 | 3,577 | 1,666 | 5 | 20 |
-| 742903 | 4,446 | 1,973 | 6 | 22 |
-| 759434 | 2,285 | 744 | 5 | 17 |
-| **Total** | **16,248** | **6,685** | — | — |
+| 664851 | 3,062 | 699 | 5 | 22 |
+| 668755 | 2,878 | 782 | 6 | 30 |
+| 713655 | 3,577 | 1,185 | 5 | 17 |
+| 742903 | 4,446 | 1,192 | 6 | 20 |
+| 759434 | 2,285 | 394 | 5 | 15 |
+| **Total** | **16,248** | **4,252** | — | — |
 
 ### QC-Passing Units by Brain Area (per session)
 
 #### 664851 (Pvalb-Cre;Ai32)
 | Structure | QC-Pass Units |
 |-----------|---------------|
-| AUDp | 203 |
-| MOs | 137 |
-| FRP | 108 |
-| CA1 | 95 |
-| CA3 | 91 |
-| ORBvl | 89 |
-| VISal | 77 |
-| LSc | 54 |
-| AUDd | 52 |
-| MOB | 43 |
-| ACAd | 39 |
-| SSp | 28 |
-| SSs | 24 |
-| ACAv | 23 |
-| TEa | 11 |
-| VISrl | 10 |
-| CA2 | 9 |
+| AUDp | 175 |
+| CA3 | 74 |
+| CA1 | 68 |
+| MOs | 52 |
+| VISal | 50 |
+| ORBvl | 48 |
+| FRP | 47 |
+| AUDd | 35 |
+| SSp | 24 |
+| LSc | 23 |
+| SSs | 22 |
+| ACAd | 19 |
+| MOB | 18 |
+| ACAv | 9 |
 | AUDv | 9 |
-| ORBl | 6 |
-| LSr | 6 |
-| OLF | 3 |
+| VISrl | 7 |
+| CA2 | 5 |
+| TEa | 5 |
+| LSr | 4 |
+| ORBl | 3 |
+| OLF | 1 |
+| out of brain | 1 |
 
 #### 668755 (Wild-type C57BL6J)
 | Structure | QC-Pass Units |
 |-----------|---------------|
-| MOs | 241 |
-| MOp | 166 |
-| ACAv | 153 |
-| SSp | 96 |
-| CP | 87 |
-| VISam | 73 |
-| VISp | 57 |
-| RSPv | 52 |
-| ACAd | 41 |
-| AON | 33 |
-| ORBl | 32 |
-| DP | 18 |
-| SCiw | 15 |
-| SCig | 13 |
-| OLF | 13 |
-| TTd | 11 |
-| HPF | 11 |
-| SCsg | 9 |
-| SCdg | 9 |
-| PPT | 9 |
-| MB | 8 |
-| FRP | 7 |
-| RSPd | 6 |
+| MOs | 164 |
+| MOp | 111 |
+| ACAv | 97 |
+| CP | 62 |
+| SSp | 59 |
+| VISp | 45 |
+| VISam | 41 |
+| RSPv | 28 |
+| ACAd | 27 |
+| ORBl | 24 |
+| AON | 21 |
+| DP | 14 |
+| SCig | 12 |
+| SCiw | 10 |
+| HPF | 9 |
+| OLF | 9 |
+| TTd | 6 |
+| FRP | 5 |
+| PPT | 5 |
+| RSPd | 5 |
+| SCdg | 5 |
 | SCop | 5 |
 | MPT | 4 |
+| SCsg | 4 |
 | PAG | 3 |
-| LGv | 3 |
-| RSPagl | 3 |
-| SCzo | 2 |
+| RSPagl | 2 |
 | VISpm | 2 |
-| SCdw | 1 |
+| LGv | 1 |
 | NOT | 1 |
+| SCzo | 1 |
 
 #### 713655 (Sst-Cre;Ai32)
 | Structure | QC-Pass Units |
 |-----------|---------------|
-| SSs | 271 |
-| MOp | 210 |
-| ECT | 200 |
-| MOs | 188 |
-| LSr | 183 |
-| CP | 142 |
-| TEa | 117 |
-| AUDp | 109 |
-| AUDv | 77 |
-| SSp | 38 |
-| VISli | 29 |
-| LSc | 28 |
-| AUDpo | 23 |
-| AD | 17 |
-| PERI | 16 |
-| AV | 11 |
-| ACAd | 7 |
+| SSs | 209 |
+| ECT | 168 |
+| LSr | 144 |
+| MOp | 134 |
+| CP | 105 |
+| MOs | 95 |
+| AUDp | 87 |
+| TEa | 77 |
+| AUDv | 62 |
+| SSp | 23 |
+| VISli | 19 |
+| AUDpo | 18 |
+| LSc | 18 |
+| PERI | 15 |
+| AD | 5 |
+| AV | 5 |
+| ACAd | 1 |
 
 #### 742903 (Vip-Cre;Ai32)
 | Structure | QC-Pass Units |
 |-----------|---------------|
-| MOs | 437 |
-| SSp | 324 |
-| ORBvl | 250 |
-| ILA | 172 |
-| SSs | 118 |
-| CP | 101 |
-| TTd | 96 |
-| ORBm | 79 |
-| ORBl | 75 |
-| ACAd | 67 |
-| GU | 54 |
-| PL | 53 |
-| LSr | 46 |
-| ACAv | 31 |
-| VISal | 20 |
-| FRP | 17 |
-| CA1 | 13 |
-| OLF | 11 |
-| CA3 | 7 |
+| MOs | 242 |
+| ORBvl | 193 |
+| SSp | 164 |
+| ILA | 109 |
+| SSs | 97 |
+| TTd | 69 |
+| CP | 46 |
+| ORBl | 44 |
+| ORBm | 44 |
+| GU | 39 |
+| ACAd | 35 |
+| LSr | 30 |
+| ACAv | 25 |
+| PL | 20 |
+| FRP | 8 |
+| OLF | 8 |
+| VISal | 8 |
+| CA1 | 7 |
+| CA3 | 2 |
 | DG | 2 |
 
 #### 759434 (VGAT-ChR2-YFP)
 | Structure | QC-Pass Units |
 |-----------|---------------|
-| SSp | 153 |
-| MOs | 147 |
-| CP | 132 |
-| ILA | 62 |
-| DP | 59 |
-| TTd | 58 |
-| CA3 | 50 |
-| PL | 46 |
-| CA1 | 18 |
-| VISli | 5 |
-| TEa | 4 |
-| ACAd | 3 |
+| SSp | 87 |
+| MOs | 70 |
+| CP | 66 |
+| TTd | 42 |
+| DP | 32 |
+| ILA | 32 |
+| CA3 | 25 |
+| PL | 22 |
+| CA1 | 8 |
 | OLF | 3 |
+| TEa | 2 |
+| VISli | 2 |
+| ACAd | 1 |
 | DG | 1 |
-| ccb | 1 |
 | scwm | 1 |
-| STR | 1 |
 
 ### Commonly Recorded Areas Across Sessions
 
@@ -323,10 +320,10 @@ The most frequently recorded areas with QC-passing units include:
 - **Hippocampus**: CA1, CA2, CA3, DG
 - **Lateral septum**: LSr, LSc
 - **Striatum**: CP (caudoputamen)
-- **Thalamus**: AD (anterodorsal), AV (anteroventral)
-- **Midbrain / superior colliculus**: SCig, SCiw, SCsg, SCop, SCdg, SCzo, SCdw
+- **Thalamus**: AD (anterodorsal), AV (anteroventral), LGv (ventral lateral geniculate)
+- **Midbrain / superior colliculus / pretectal**: SCig, SCiw, SCsg, SCop, SCdg, SCzo, MPT, NOT
 - **Olfactory**: AON, OLF, TTd, MOB, DP
-- **Other**: GU (gustatory), RSPv/RSPd (retrosplenial), PAG, PPT, HPF, MB
+- **Other**: GU (gustatory), RSPv/RSPd/RSPagl (retrosplenial), PAG, PPT, HPF, scwm
 
 ---
 
