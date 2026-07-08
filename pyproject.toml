@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "altair>=6.1.0",
+    "graphviz>=0.21",
     "ipykernel>=7.2.0",
     "lazynwb==1.0.0.dev3",
     "matplotlib",
