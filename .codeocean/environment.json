@@ -20,6 +20,10 @@
 		"pip3": {
 			"packages": [
 				{
+					"name": "aind-data-access-api",
+					"version": "1.2.1"
+				},
+				{
 					"name": "altair",
 					"version": "6.1.0"
 				},

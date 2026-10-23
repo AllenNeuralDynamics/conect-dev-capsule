@@ -498,9 +498,9 @@ def plot_unit_raster_psth(
         trials.with_columns(
             pl.Series(
                 name="spike_times",
-                values=spike_times_by_trial,
+                values=[np.asarray(a, dtype="float64").tolist() for a in spike_times_by_trial],
                 dtype=pl.List(pl.Float64),
-            ),
+            )
         )
         .with_row_index()
         .explode("spike_times")

@@ -1,7 +1,5 @@
-<h1 align="center">CoNECTOME Hackathon</h1>  
+<h1 align="center">Dynamic Routing</h1>  
 <h1 align="center">Allen Institute/Neural Dynamics</h1>  
-<h4 align="center"> May 20, 2026 </h4>   
-<h4 align="center"> Dynamic Routing</h4> 
 
 Source:
 https://github.com/AllenNeuralDynamics/conect-dev-capsule
@@ -69,15 +67,22 @@ Each attached asset contains:
 All animals successfully switched between contexts, as demonstrated by high d' values for the rewarded modality and suppressed responses to the non-rewarded modality. 
 A total of **6,685 QC-passing units** were recorded.
 
+to do: need to update... 
+
 | Session | Subject | Sex | Age | Genotype | Strain | Experiment Day |
 |---------|---------|-----|-----|----------|--------|----------------|
+| 662892-2023-08-24 | 662892 | F | P310 | Pvalb-IRES-Cre/wt;Ai32 | Pvalb-IRES-Cre;Ai32 | Day 3 |
 | 664851_2023-11-15 | 664851 | F | P310 | Pvalb-IRES-Cre/wt;Ai32 | Pvalb-IRES-Cre;Ai32 | Day 3 |
-| 668755_2023-08-31 | 668755 | M | P206 | wt/wt | C57BL6J(NP) | Day 4 |
+| 667252-2023-09-28 | 667252 | M | P260 | Sst-IRES-Cre/wt;Ai32 | Sst-IRES-Cre;Ai32 | Day 5 |
+| 708016-2024-04-29 | 708016 | F | P159 | Vip-IRES-Cre/wt;Ai32 | Vip-IRES-Cre;Ai32 | Day 2 |
+| 712815-2024-05-22 | 712815 | M | P177 | VGAT-ChR2-YFP/wt | VGAT-ChR2-YFP(ND) | Day 2 |
 | 713655_2024-08-09 | 713655 | M | P260 | Sst-IRES-Cre/wt;Ai32 | Sst-IRES-Cre;Ai32 | Day 5 |
+| 714748-06-24 | 714748 | M | P177 | VGAT-ChR2-YFP/wt | VGAT-ChR2-YFP(ND) | Day 2 |
+| 715710-2024-07-16 | 715710 | M | P177 | VGAT-ChR2-YFP/wt | VGAT-ChR2-YFP(ND) | Day 2 |
+| 741137-2024-10-10 | 741137 | M | P177 | VGAT-ChR2-YFP/wt | VGAT-ChR2-YFP(ND) | Day 2 |
 | 742903_2024-10-22 | 742903 | F | P159 | Vip-IRES-Cre/wt;Ai32 | Vip-IRES-Cre;Ai32 | Day 2 |
 | 759434_2025-02-04 | 759434 | M | P177 | VGAT-ChR2-YFP/wt | VGAT-ChR2-YFP(ND) | Day 2 |
 
-Three of the five mouse lines express channelrhodopsin (ChR2) in specific inhibitory interneuron classes (Pvalb, Sst, Vip, or all GABAergic via VGAT), enabling optotagging of those cell types. One mouse (668755) is wild-type.
 
 ---
 
