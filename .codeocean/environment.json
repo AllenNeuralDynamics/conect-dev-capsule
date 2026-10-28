@@ -1,7 +1,6 @@
 {
 	"version": 1,
-	"base_image": "codeocean/mambaforge3:23.1.0-4-python3.10.12-ubuntu22.04",
-	"post_install": true,
+	"base_image": "codeocean/code-server-python-extensions-pack:code-server4.129.0python3.12.4codeocean-mcp-serveruvpyreflyetc",
 	"options": {
 		"registry_host_arg": true,
 		"git_ask_pass": true,
@@ -22,10 +21,6 @@
 				{
 					"name": "aind-data-access-api",
 					"version": "1.2.1"
-				},
-				{
-					"name": "altair",
-					"version": "6.1.0"
 				},
 				{
 					"name": "git+https://github.com/AllenNeuralDynamics/brainglobe-atlasapi#egg=brainglobe-atlasapi",

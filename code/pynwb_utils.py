@@ -9,7 +9,6 @@ import numpy as np
 import numpy.typing as npt
 import pandas as pd
 import polars as pl
-import altair as alt
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 plt.rcParams["font.family"] = "Arial"
@@ -91,8 +90,8 @@ def plot_ccf_coordinates(
     units_df_or_nwb,
     *,
     title: str = "Allen CCF coordinates of Neuropixels recording sites",
-) -> alt.ConcatChart:
-    """Return an Altair chart of AP/DV and ML/DV CCF coordinate projections.
+) -> plt.Figure:
+    """Return a matplotlib figure of AP/DV and ML/DV CCF coordinate projections.
 
     Parameters
     ----------
@@ -102,7 +101,7 @@ def plot_ccf_coordinates(
         ``ccf_dv``, ``electrode_group_name``), or a ``pynwb.NWBFile`` from
         which the units table is extracted automatically.
     title:
-        Chart title.
+        Figure title.
     """
     # ------------------------------------------------------------------ #
     # 1. Resolve units_df
@@ -163,7 +162,7 @@ def plot_ccf_coordinates(
 
     domain = color_map["structure"].tolist()
     color_range = color_map["color_hex_triplet"].tolist()
-    color_scale = alt.Scale(domain=domain, range=color_range)
+    structure_colors = dict(zip(domain, color_range))
 
     # ------------------------------------------------------------------ #
     # 3. Axis / domain helpers
@@ -177,47 +176,70 @@ def plot_ccf_coordinates(
             hi = center + min_span / 2
         return [lo, hi]
 
-    def domain_pixels(dom: list[float]) -> int:
-        return max(1, round((dom[1] - dom[0]) * _PIXELS_PER_MM))
+    def domain_inches(dom: list[float]) -> float:
+        return max(0.5, (dom[1] - dom[0]) * _PIXELS_PER_MM / 100)
 
     ccf_ap_domain = padded_domain(unit_ccf["ccf_ap"], min_span=2.0)
     ccf_ml_domain = padded_domain(unit_ccf["ccf_ml"], min_span=2.0)
     ccf_dv_domain = padded_domain(unit_ccf["ccf_dv"])
 
-    axis_gap = "\u00a0" * 20
-    x_axis_ap = alt.Axis(title=f"← anterior{axis_gap}(mm){axis_gap}posterior →")
-    x_axis_ml = alt.Axis(title=f"← medial{axis_gap}(mm){axis_gap}lateral →")
-    y_axis_dv = alt.Axis(title=f"← dorsal{axis_gap}(mm){axis_gap}ventral →")
+    axis_gap = "\u00a0" * 10
+    x_label_ap = f"← anterior{axis_gap}(mm){axis_gap}posterior →"
+    x_label_ml = f"← medial{axis_gap}(mm){axis_gap}lateral →"
+    y_label_dv = f"← dorsal{axis_gap}(mm){axis_gap}ventral →"
 
     # ------------------------------------------------------------------ #
-    # 4. Build chart
+    # 4. Build figure
     # ------------------------------------------------------------------ #
-    base = (
-        alt.Chart(unit_ccf)
-        .mark_point()
-        .encode(
-            tooltip=[c for c in _TOOLTIP_COLS if c in unit_ccf.columns],
-            color=alt.Color("structure", scale=color_scale, legend=None),
-        )
+    panel_widths = [domain_inches(ccf_ap_domain), domain_inches(ccf_ml_domain)]
+    fig, (ax_ap, ax_ml) = plt.subplots(
+        1,
+        2,
+        figsize=(sum(panel_widths) + 3.0, domain_inches(ccf_dv_domain) + 1.0),
+        gridspec_kw={"width_ratios": panel_widths},
     )
 
-    ap_projection = base.encode(
-        x=alt.X("ccf_ap", axis=x_axis_ap, scale=alt.Scale(domain=ccf_ap_domain, nice=False)),
-        y=alt.Y("ccf_dv", axis=y_axis_dv, scale=alt.Scale(domain=ccf_dv_domain, nice=False, reverse=True)),
-    ).properties(
-        width=domain_pixels(ccf_ap_domain),
-        height=domain_pixels(ccf_dv_domain),
-    )
+    for structure, group in unit_ccf.groupby("structure", sort=True):
+        color = structure_colors.get(structure, "#999999")
+        for ax, x_col in ((ax_ap, "ccf_ap"), (ax_ml, "ccf_ml")):
+            ax.scatter(
+                group[x_col],
+                group["ccf_dv"],
+                s=10,
+                facecolors="none",
+                edgecolors=color,
+                linewidths=0.6,
+                label=structure if ax is ax_ap else None,
+            )
 
-    ml_projection = base.encode(
-        x=alt.X("ccf_ml", axis=x_axis_ml, scale=alt.Scale(domain=ccf_ml_domain, nice=False, reverse=True)),
-        y=alt.Y("ccf_dv", axis=y_axis_dv, scale=alt.Scale(domain=ccf_dv_domain, nice=False, reverse=True)),
-    ).properties(
-        width=domain_pixels(ccf_ml_domain),
-        height=domain_pixels(ccf_dv_domain),
-    )
+    for ax, x_domain, x_label in (
+        (ax_ap, ccf_ap_domain, x_label_ap),
+        (ax_ml, ccf_ml_domain, x_label_ml),
+    ):
+        ax.set_xlim(*x_domain)
+        ax.set_ylim(ccf_dv_domain[1], ccf_dv_domain[0])  # dorsal at top
+        ax.set_aspect("equal")
+        ax.set_xlabel(x_label)
+        ax.spines[["top", "right"]].set_visible(False)
 
-    return (ap_projection | ml_projection).properties(title=title)
+    ax_ml.invert_xaxis()  # medial on the left
+    ax_ap.set_ylabel(y_label_dv)
+
+    handles, labels = ax_ap.get_legend_handles_labels()
+    fig.legend(
+        handles,
+        labels,
+        title="structure",
+        loc="center left",
+        bbox_to_anchor=(1.0, 0.5),
+        frameon=False,
+        fontsize=7,
+        title_fontsize=8,
+        ncols=max(1, len(labels) // 25 + 1),
+    )
+    fig.suptitle(title)
+    fig.tight_layout()
+    return fig
 
 
 # ---------------------------------------------------------------------------
