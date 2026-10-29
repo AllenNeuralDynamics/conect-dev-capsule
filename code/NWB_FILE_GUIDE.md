@@ -1,15 +1,10 @@
-# Dynamic Routing NWB files: a guide to what's inside
+# Dynamic Routing NWB File Organization 
 
-Each session of the Dynamic Routing project is packaged as **one NWB file** (Zarr format, `<subject>_<date>.nwb.zarr`).
-It contains the task trials, spike-sorted units, probe and electrode metadata, and processed behavior
-(running, licks, rewards, face and eye tracking).
+This document shows how the NWB file is organized, how to access each data piece using `pynwb`, and explains any naming conventions shared across fields. For a high-level description of the experiment, see the README. For a full description of the NWB file, including each dtype, shape, and value range, see the data dictionary. 
 
-This guide shows how the file is organized, how to reach each part with `pynwb`, and the conventions shared
-across fields. For a description of the experiment (task, trials, etc), see the [README](README.md#task).
-For every column's dtype, shape and value range, see the [data dictionary](#full-data-dictionary).
+Each session of the Dynamic Routing project is packaged as one NWB file (Zarr format), `<subject>_<date>.nwb.zarr`). Each NWB file contains spike-sorted units, task trials, probe and electrode metadata, and processed behavior data (running, licks, rewards, performance, face and eye tracking). 
 
 ---
-
 ## Quick start
 
 ```python
@@ -17,11 +12,11 @@ import pynwb
 
 nwb = pynwb.read_nwb("/root/capsule/data/dynamicrouting_datacube/<session folder>/<session>.nwb.zarr")
 
-nwb.intervals.keys()                        # interval tables: trials, epochs, ...
+nwb.intervals.keys()                        # interval tables: epochs, trials 
 nwb.processing["behavior"].data_interfaces  # processed behavior
 nwb.units.colnames                          # columns of the units table
 
-trials = nwb.trials[:]                      # any table -> pandas DataFrame
+trials = nwb.trials[:]                      # convert DynamicTable to pandas DataFrame
 nwb.trials["stim_name"].description         # description of one column
 ```
 ---
@@ -34,7 +29,7 @@ nwb.trials["stim_name"].description         # description of one column
 | **`*_time` columns** | Event times within a trial or interval, e.g. `stim_start_time`, `response_time`. `NaN` means the event didn't happen (e.g. no lick). |
 | **`is_*` columns** | Booleans for filtering rows, e.g. `trials.query("is_hit")`. |
 | **`*_index` columns** | 0-indexed integers, e.g. `block_index`, `trial_index_in_block`. |
-| **Tables** | Stored as `DynamicTable`s. `table[:]` or `table.to_dataframe()` returns a DataFrame; `table.colnames` lists columns; `table[col].description` explains each one. |
+| **Tables** | Stored as `DynamicTable`s. `table[:]` or `table.to_dataframe()` returns a DataFrame; `table.colnames` lists columns; `table[col].description` provides an explanation. |
 | **Ragged columns** | Some columns hold a variable-length list per row (e.g. `units.spike_times`, `epochs.interval_names`). In a DataFrame each cell is an array. |
 | **Timeseries** | `TimeSeries` objects have `.data`, `.timestamps` and `.unit`. Load them with `.data[:]` (or a slice, for large arrays). |
 | **Brain coordinates** | Allen CCF v3, in µm: `ccf_ap` / `x` (+ is posterior), `ccf_dv` / `y` (+ is inferior), `ccf_ml` / `z` (+ is right). `structure` is the coarse area acronym, `location` the more specific CCF acronym. |
