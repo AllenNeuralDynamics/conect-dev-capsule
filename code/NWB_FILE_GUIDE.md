@@ -5,10 +5,8 @@ It contains the task trials, spike-sorted units, probe and electrode metadata, a
 (running, licks, rewards, face and eye tracking).
 
 This guide shows how the file is organized, how to reach each part with `pynwb`, and the conventions shared
-across fields. For the full list of every column with its dtype, shape and value range, see the
-[data dictionary](#full-data-dictionary).
-
-Counts below (rows, samples) are from the example session `742903_2024-10-23` and will differ between sessions.
+across fields. For a description of the experiment (task, trials, etc), see the [README](README.md#task).
+For every column's dtype, shape and value range, see the [data dictionary](#full-data-dictionary).
 
 ---
 
@@ -26,14 +24,11 @@ nwb.units.colnames                          # columns of the units table
 trials = nwb.trials[:]                      # any table -> pandas DataFrame
 nwb.trials["stim_name"].description         # description of one column
 ```
-
-Opening a file is lazy: nothing is read until you index into it (`[:]`, `.to_dataframe()`, `.data[...]`).
-
 ---
 
 ## Conventions
 
-| Convention | Meaning |
+| Convention | Definition |
 |---|---|
 | **Times** | Seconds, relative to `nwb.session_start_time`. Every `*_time` column and every `timestamps` array uses the same clock, so they can be compared directly. |
 | **`*_time` columns** | Event times within a trial or interval, e.g. `stim_start_time`, `response_time`. `NaN` means the event didn't happen (e.g. no lick). |
@@ -47,49 +42,48 @@ Opening a file is lazy: nothing is read until you index into it (`[:]`, `.to_dat
 
 ---
 
-## File map
+## File Structure
 
 ```
 NWBFile
 ├── session metadata        nwb.session_id, nwb.session_start_time, nwb.institution, ...
 ├── general
 │   ├── subject             nwb.subject                       Subject (age, sex, genotype, strain, ...)
-│   ├── devices             nwb.devices                       5 Neuropixels 1.0 probes + 5 manipulators
+│   ├── devices             nwb.devices                       Neuropixels probes and their manipulators
 │   ├── electrode groups    nwb.electrode_groups              one per probe (probeA, probeB, ...)
-│   └── electrodes          nwb.electrodes                    one row per recording channel (1,920)
+│   └── electrodes          nwb.electrodes                    one row per recording channel
 ├── intervals
-│   ├── epochs              nwb.intervals["epochs"]           phases of the session (8)
-│   ├── trials              nwb.trials                        Dynamic Routing task trials (489)
-│   ├── performance         nwb.intervals["performance"]      per-block behavior summary (6)
-│   ├── vis_rf_mapping_trials   nwb.intervals["vis_rf_mapping_trials"]   (1,224)
-│   ├── aud_rf_mapping_trials   nwb.intervals["aud_rf_mapping_trials"]   (432)
-│   └── optotagging_trials  nwb.intervals["optotagging_trials"]           (300)
-├── units                   nwb.units                         spike-sorted units (3,588)
+│   ├── epochs              nwb.intervals["epochs"]           phases of the session
+│   ├── trials              nwb.trials                        task trials, one row per trial
+│   ├── performance         nwb.intervals["performance"]      behavior summary, one row per block
+│   ├── vis_rf_mapping_trials   nwb.intervals["vis_rf_mapping_trials"]
+│   ├── aud_rf_mapping_trials   nwb.intervals["aud_rf_mapping_trials"]
+│   └── optotagging_trials  nwb.intervals["optotagging_trials"]
+├── units                   nwb.units                         spike-sorted units, one row per unit
 ├── processing
 │   ├── behavior            nwb.processing["behavior"][...]
-│   │   ├── running_speed                   TimeSeries     ~60 Hz
-│   │   ├── licks                           DynamicTable   (3,324)
-│   │   ├── rewards                         DynamicTable   (142)
-│   │   ├── quiescent_interval_violations   DynamicTable   (175)
+│   │   ├── running_speed                   TimeSeries
+│   │   ├── licks                           DynamicTable   one row per lick-spout contact
+│   │   ├── rewards                         DynamicTable   one row per reward
+│   │   ├── quiescent_interval_violations   DynamicTable
 │   │   ├── lp_side_camera, lp_front_camera DynamicTable   face keypoints, one row per video frame
 │   │   ├── dlc_eye_camera                  DynamicTable   eye keypoints, one row per video frame
 │   │   ├── eye_tracking                    DynamicTable   pupil / eyelid / corneal-reflection ellipses
 │   │   └── facemap_side_camera, facemap_front_camera   TimeSeries   motion SVD (frames x 500)
-│   └── ecephys             (empty in these files)
+│   └── ecephys             (empty)
 ├── acquisition
 │   ├── frametimes_eye_camera, frametimes_front_camera, frametimes_side_camera   DynamicTable
 │   └── manipulator_positions                                                    DynamicTable
-├── stimulus                (empty in these files)
-└── analysis                (empty in these files)
+├── stimulus                (empty)
+└── analysis                (empty)
 ```
-
 ---
 
 ## Sections
 
 ### Session metadata and `general`
 
-| Access | Description |
+| Access | Definition |
 |---|---|
 | `nwb.session_id`, `nwb.session_start_time`, `nwb.experimenter`, `nwb.keywords`, ... | Session-level metadata. `session_start_time` is the zero point for all times in the file. |
 | `nwb.subject` | Subject info: `subject_id`, `age`, `date_of_birth`, `sex`, `genotype`, `strain`, `species`. |
@@ -97,16 +91,16 @@ NWBFile
 | `nwb.electrode_groups["probeA"]` | One group per inserted probe; `location` is the insertion hole label, `device` links to the probe. |
 | `nwb.electrodes` | One row per channel: `group_name` (probe), `channel` (0 at the tip), `rel_x`, `rel_y` (µm on the probe), `x`, `y`, `z` (CCF µm), `structure`, `location`, `raw_structure`, `imp`, `reference`. |
 
-### `intervals`: what happened and when 
+### `intervals`: what happened when
 
 Each table has `start_time` and `stop_time` per row.
 
-**`epochs`** (8 rows): the phases of a session. `script_name` identifies the task or stimulus program
+**`epochs`**: the phases of a session. `script_name` identifies the task or stimulus program
 (`DynamicRouting1` is the behavior task, ~1 hour); `interval_names` lists the other interval tables that
 hold trials from that epoch.
 
-**`trials`** (489 rows): one row per trial of the Dynamic Routing task. Also available as `nwb.trials`.
-The 49 columns fall into groups:
+**`trials`**: one row per trial of the Dynamic Routing task. Also available as `nwb.trials`.
+The columns fall into groups:
 
 | Group | Columns |
 |---|---|
@@ -116,6 +110,29 @@ The 49 columns fall into groups:
 | Outcome flags | `is_response`, `is_hit`, `is_miss`, `is_false_alarm`, `is_correct_reject`, `is_correct`, `is_incorrect`, `is_task_control_correct` |
 | Trial type flags | `is_go`, `is_nogo`, `is_target`, `is_nontarget`, `is_vis_target`, `is_aud_target`, `is_vis_nontarget`, `is_aud_nontarget`, `is_vis_stim`, `is_aud_stim`, `is_catch`, `is_vis_rewarded`, `is_aud_rewarded` |
 | Reward and block flags | `is_rewarded`, `is_contingent_reward`, `is_noncontingent_reward`, `is_reward_scheduled`, `is_instruction`, `is_block_switch`, `is_repeat`, `is_opto` |
+
+The trial phases described in the [README](README.md#trial-structure) map onto these columns:
+
+| Trial phase | Columns |
+|---|---|
+| Quiescent period (licking restarts the trial) | `quiescent_start_time` → `quiescent_stop_time` |
+| Stimulus | `stim_start_time` → `stim_stop_time` |
+| Response window | `response_window_start_time` → `response_window_stop_time` |
+| Post-response window | `post_response_window_start_time` → `post_response_window_stop_time` |
+| Lick and reward | `response_time` (first lick in the response window, `NaN` if none), `reward_time` (`NaN` if no reward) |
+
+And the trial types onto these flags:
+
+| Trial type | Flag | Outcome flags |
+|---|---|---|
+| Go (target of the rewarded modality) | `is_go` | `is_hit` (lick) / `is_miss` (no lick) |
+| No-go (any other stimulus; excludes catch trials) | `is_nogo` | `is_false_alarm` (lick) / `is_correct_reject` (no lick) |
+| Catch (no stimulus) | `is_catch` | `is_response` (lick) |
+| Instruction trials at the start of a block | `is_instruction` | `is_contingent_reward` / `is_noncontingent_reward` |
+
+Other flags: `is_reward_scheduled` (a non-contingent reward was scheduled, whether or not it was delivered),
+`is_repeat` (the trial repeats the previous one after a miss; `repeat_index` counts the repeats),
+`is_opto` (optogenetic inactivation during the trial).
 
 **`performance`** (one row per block): pre-computed behavior summary: `n_trials`, `n_responses`, `n_hits`,
 `hit_rate`, `false_alarm_rate`, `catch_response_rate`, `{vis,aud}_{target,nontarget}_response_rate`,
@@ -129,7 +146,7 @@ and baseline / response windows that already exclude the light-onset artifact.
 
 ### `units`: spike-sorted neurons
 
-One row per unit from Kilosort 2.5 (3,588 rows; use `is_qc_pass` to keep well-isolated, stable units).
+One row per unit from Kilosort 2.5. Use `is_qc_pass` to keep well-isolated, stable units.
 
 | Group | Columns |
 |---|---|
@@ -149,7 +166,7 @@ units = nwb.units.to_dataframe(exclude={"spike_amplitudes", "electrode_group"})
 
 | Name | Type | Contents |
 |---|---|---|
-| `running_speed` | TimeSeries | Forward running speed on the disk, cm/s, low-pass filtered at 4 Hz. ~60 Hz. |
+| `running_speed` | TimeSeries | Forward running speed on the disk, cm/s, low-pass filtered at 4 Hz. Sampled at ~60 Hz. |
 | `licks` | DynamicTable | One row per contact with the lick spout: `timestamps`, `duration`, `is_likely_lick` (contacts may include grooming). |
 | `rewards` | DynamicTable | One row per water reward: `timestamps`, `duration`, `is_solenoid_time`. |
 | `quiescent_interval_violations` | DynamicTable | `timestamps` of licks during the pre-trial quiescent period, which restart the trial. |
