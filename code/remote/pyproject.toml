@@ -1,16 +1,15 @@
 [project]
 name = "remote-dynamic-routing-tutorial"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.2.0"
+description = "Dynamic Routing data access tutorial, streaming NWB files from the public aind-open-data S3 bucket with lazynwb"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "altair>=6.1.0",
-    "ipykernel>=7.2.0",
-    "lazynwb==1.0.0.dev3",
+    "brainglobe-atlasapi",  
+    "ipykernel>=7.2.0",     
+    "lazynwb>=1.0.0",       
     "matplotlib",
     "numpy",
+    "pandas",
     "polars",
-    "polars-vec-ops>=0.1.8",
-    "vl-convert-python",
 ]
