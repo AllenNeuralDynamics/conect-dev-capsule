@@ -8,8 +8,8 @@ Source: https://github.com/AllenNeuralDynamics/conect-dev-capsule
 | Document | Description |
 |---|---|
 | README | Overview of the project, dynamic routing task, and dataset |
-| [Tutorial notebook](code/sfn-tutorial-revised.ipynb) | Load a session and plot the main data types |
-| [NWB_FILE_GUIDE.md](NWB_FILE_GUIDE.md) | Explains the NWB file organization and structure
+| [Tutorial notebook](code/remote/dynamic_routing_tutorial_remote.ipynb) | Load a session and plot the main data types |
+| [NWB_FILE_GUIDE.md](resource_files/NWB_FILE_GUIDE.md) | Explains the NWB file organization and structure
 | Data dictionary | Full description of data: shape, units, value range, description. 
 | [REMOTE.md](REMOTE.md) | Access the data outside of Code Ocean |
 
