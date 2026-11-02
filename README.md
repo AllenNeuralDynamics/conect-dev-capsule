@@ -9,7 +9,7 @@ Source: https://github.com/AllenNeuralDynamics/conect-dev-capsule
 |---|---|
 | README | Overview of the project, dynamic routing task, and dataset |
 | [Tutorial notebook](https://github.com/AllenNeuralDynamics/dynamic-routing-data-access/blob/main/code/remote/dynamic_routing_tutorial_remote.ipynb) | Load a session and plot the main data types |
-| [NWB File Guide](https://github.com/AllenNeuralDynamics/dynamic-routing-data-access/blob/main/resource-files/NWB_FILE_GUIDE.md)) | Explains the NWB file organization and structure
+| [NWB File Guide](https://github.com/AllenNeuralDynamics/dynamic-routing-data-access/blob/main/resource-files/NWB_FILE_GUIDE.md) | Explains the NWB file organization and structure
 | [Data dictionary](https://github.com/AllenNeuralDynamics/dynamic-routing-data-access/blob/main/resource-files/742903_2024-10-23_data_dictionary.md) | Full description of data: shape, units, value range, description. 
 
 ---
