@@ -1,4 +1,4 @@
-# hash:sha256:e82c84739277ae1cf9ae376b79e1bfaeacce7729bd7155bff128d4fabbf3f367
+# hash:sha256:f60e165c5274577240495febc1a352c5527a06a3aa126630b460ff46f32260fa
 ARG REGISTRY_HOST
 FROM $REGISTRY_HOST/codeocean/code-server-python-extensions-pack:code-server4.129.0python3.12.4codeocean-mcp-serveruvpyreflyetc
 
@@ -17,7 +17,10 @@ RUN --mount=type=secret,id=git-access-token \
     aind-data-access-api==1.2.1 \
     hdmf-zarr==0.12.0 \
     lazynwb==1.0.0.dev3 \
-    matplotlib==3.10.9 \
+    matplotlib==3.11.2 \
+    numpy==2.5.4 \
+    pandas==3.1.0 \
+    polars==2.1.0 \
+    pynrrd==1.1.3 \
     pynwb==3.1.3 \
-    vl-convert-python==1.9.0.post1 \
     -e git+https://github.com/AllenNeuralDynamics/brainglobe-atlasapi@2b3fed883c20184bdf921e294450c8a4054049c1#egg=brainglobe-atlasapi
