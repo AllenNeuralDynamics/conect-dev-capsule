@@ -102,7 +102,7 @@ Additional trial flags: `is_repeat` (repeated after a miss), `is_opto` (optogene
 ## Data
 
 Each session is packaged as a data asset in `/data`, containing:
-- an NWB file (`<subject>_<date>.nwb.zarr`) with the task trials, spike-sorted units, probe metadata and processed behavior. See [NWB_FILE_GUIDE.md](NWB_FILE_GUIDE.md) for its organization.
+- an NWB file (`<subject>_<date>.nwb.zarr`) with the task trials, spike-sorted units, probe metadata and processed behavior.
 - AIND metadata `.json` files
 
 `/data/metadata/dynamic_routing_metadata.csv` lists the sessions in the dataset.
