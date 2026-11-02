@@ -3,13 +3,13 @@ name = "remote-dynamic-routing-tutorial"
 version = "0.2.0"
 description = "Dynamic Routing data access tutorial, streaming NWB files from the public aind-open-data S3 bucket with lazynwb"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-    "brainglobe-atlasapi",  
-    "ipykernel>=7.2.0",     
-    "lazynwb>=1.0.0",       
-    "matplotlib",
-    "numpy",
-    "pandas",
-    "polars",
+    "ipykernel>=7.2.0",
+    "lazynwb>=1.0.0",
+    "matplotlib>=3.10",
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "polars>=2.0",
+    "pynrrd>=1.1.3",
 ]
