@@ -5,6 +5,7 @@ description = "Dynamic Routing data access tutorial, streaming NWB files from th
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "aind-data-access-api[docdb]>=1.2.1",
     "ipykernel>=7.2.0",
     "lazynwb>=1.0.0",
     "matplotlib>=3.10",
