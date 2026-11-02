@@ -5,7 +5,7 @@ We've provided [/code/remote/dynamic_routing_tutorial_remote.ipynb](code/remote/
 ## Setup
 1. Clone the repository and navigate to the `code/remote` directory:
     ```bash
-    git clone https://github.com/AllenNeuralDynamics/conect-dev-capsule.git
+    git clone https://github.com/AllenNeuralDynamics/dynamic-routing-data-access.git
     cd conect-dev-capsule/code/remote
     ```
 2. Create a virtual environment and install the required dependencies (`uv` recommended: https://docs.astral.sh/uv/getting-started/installation/):
