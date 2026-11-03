@@ -1,8 +1,6 @@
 <h1 align="center">Dynamic Routing</h1>
 <h1 align="center">Allen Institute / Neural Dynamics</h1>
 
-Source: https://github.com/AllenNeuralDynamics/conect-dev-capsule
-
 ## Documentation
 
 | Document | Description |
